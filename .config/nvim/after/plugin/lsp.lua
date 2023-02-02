@@ -1,7 +1,5 @@
 local lsp = require('lsp-zero')
 
-vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
-
 lsp.preset('recommended')
 
 lsp.ensure_installed({
@@ -25,6 +23,10 @@ lsp.set_preferences({
     sign_icons = {}
 })
 
+lsp.setup_nvim_cmp({
+    mapping = cmp_mappings
+})
+
 lsp.on_attach(function(client, bufnr)
     local opts = { buffer = bufnr, remap = false }
 
@@ -41,3 +43,14 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.setup()
+
+vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = false,
+    float = true,
+})
+
+vim.cmd [[autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()]]
