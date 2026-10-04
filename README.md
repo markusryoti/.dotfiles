@@ -36,7 +36,7 @@ dot ls-files                    # list everything tracked
 
 ```bash
 # 1. Clone as a bare repo
-git clone --bare git@github-personal:markusryoti/.dotfiles.git ~/.dotfiles
+git clone --bare git@github.com:markusryoti/.dotfiles.git ~/.dotfiles
 
 # 2. Define the alias for this shell
 alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
@@ -45,18 +45,12 @@ alias dot='git --git-dir=$HOME/.dotfiles --work-tree=$HOME'
 #    If it fails because files already exist, back them up / remove them first.
 dot checkout
 
-# 4. Hide untracked files and set the commit identity for this repo
+# 4. Hide untracked files
 dot config status.showUntrackedFiles no
-dot config user.name "markusryoti"
-dot config user.email mryoti@gmail.com
 
 # 5. Make the alias permanent
 echo "alias dot='git --git-dir=\$HOME/.dotfiles --work-tree=\$HOME'" >> ~/.zshrc
 ```
-
-`github-personal` is an SSH host alias in `~/.ssh/config` pointing to
-`github.com` with the personal key. Use `git@github.com:markusryoti/.dotfiles.git`
-if that alias isn't set up.
 
 ## Notes
 
