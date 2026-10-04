@@ -6,6 +6,8 @@ work tree is `$HOME`, so files stay in their normal locations — no symlinks.
 Currently tracked:
 
 - Neovim (`~/.config/nvim`)
+- k9s (`~/.config/k9s`) — aliases, Catppuccin skins ([catppuccin/k9s](https://github.com/catppuccin/k9s))
+- lazygit (`~/.config/lazygit`) — Catppuccin Mocha theme
 
 ## Daily use
 
@@ -58,4 +60,6 @@ if that alias isn't set up.
 
 ## Notes
 
-- k9s skin: [catppuccin/k9s](https://github.com/catppuccin/k9s)
+- macOS: k9s and lazygit only read `~/.config` when `XDG_CONFIG_HOME` is set
+  (`export XDG_CONFIG_HOME=$HOME/.config` in `~/.zshrc`); otherwise they use
+  `~/Library/Application Support`.
