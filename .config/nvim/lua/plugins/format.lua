@@ -80,12 +80,7 @@ return {
     event = "VeryLazy",
     dependencies = { "mason-org/mason.nvim" },
     opts = {
-      -- In the ROS dev container clang-format comes from apt and there is no
-      -- Go toolchain, so only install what works there. The Linux study
-      -- container (NVIM_LINUX_DEV) has no Node either.
-      ensure_installed = vim.env.NVIM_ROS and { "stylua", "prettierd" }
-        or vim.env.NVIM_LINUX_DEV and { "stylua" }
-        or {
+      ensure_installed = {
         "stylua",
         "gofumpt",
         "goimports",

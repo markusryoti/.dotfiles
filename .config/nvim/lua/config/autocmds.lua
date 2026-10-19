@@ -102,6 +102,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
       end, { buffer = ev.buf, desc = "Toggle inlay hints" })
     end
 
+    if client:supports_method("textDocument/semanticTokens/full") then
+      vim.keymap.set("n", "<leader>uS", function()
+        local filter = { bufnr = ev.buf }
+        vim.lsp.semantic_tokens.enable(not vim.lsp.semantic_tokens.is_enabled(filter), filter)
+      end, { buffer = ev.buf, desc = "Toggle semantic highlighting" })
+    end
+
     -- The command comes from nvim-lspconfig's clangd on_attach.
     if client.name == "clangd" then
       vim.keymap.set("n", "<leader>cs", "<cmd>LspClangdSwitchSourceHeader<CR>", {
@@ -109,6 +116,29 @@ vim.api.nvim_create_autocmd("LspAttach", {
         desc = "Switch source/header",
       })
     end
+  end,
+})
+
+-- Clear stale rust-analyzer semantic tokens.
+--
+-- Neovim keeps the previous semantic-token highlights (extmarks) on screen
+-- until the server returns fresh tokens. Editing inside or next to a token
+-- stretches those extmarks, so colors change mid-word. rust-analyzer is slow
+-- to answer while it has errors to check (and often replies ContentModified),
+-- so the garbled colors linger. Publishing diagnostics means it has caught up
+-- with the buffer, so re-request tokens then and when leaving insert mode.
+vim.api.nvim_create_autocmd({ "DiagnosticChanged", "InsertLeave" }, {
+  group = augroup,
+  pattern = "*.rs",
+  callback = function(ev)
+    if not vim.api.nvim_buf_is_loaded(ev.buf) then
+      return
+    end
+    -- Diagnostics can arrive mid-typing; wait for InsertLeave in that case.
+    if ev.event == "DiagnosticChanged" and vim.api.nvim_get_mode().mode:sub(1, 1) == "i" then
+      return
+    end
+    vim.lsp.semantic_tokens.force_refresh(ev.buf)
   end,
 })
 

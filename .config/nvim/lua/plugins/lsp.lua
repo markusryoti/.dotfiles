@@ -52,19 +52,6 @@ return {
         "jsonls",
         "terraformls",
       }
-      -- Inside the ROS dev container (~/Dev/personal/ros2) only a subset is
-      -- installable: Mason has no linux-arm64 clangd (the image ships it via
-      -- apt, enabled in config below), and go/java/etc. toolchains are absent.
-      if vim.env.NVIM_ROS then
-        servers = { "lua_ls", "basedpyright", "ruff", "yamlls", "jsonls" }
-        return { ensure_installed = servers, automatic_enable = servers }
-      end
-      -- Inside the Linux study container (~/Dev/personal/docker-linux) only
-      -- C/C++ and Rust toolchains exist; clangd comes from apt (see below).
-      if vim.env.NVIM_LINUX_DEV then
-        servers = { "lua_ls", "rust_analyzer" }
-        return { ensure_installed = servers, automatic_enable = servers }
-      end
       return {
         -- jdtls is installed here but deliberately kept out of automatic_enable
         -- below: it needs a separate -data workspace per project, the Lombok
@@ -103,10 +90,6 @@ return {
       })
 
       require("mason-lspconfig").setup(opts)
-
-      if vim.env.NVIM_ROS or vim.env.NVIM_LINUX_DEV then
-        vim.lsp.enable("clangd")
-      end
     end,
   },
 
