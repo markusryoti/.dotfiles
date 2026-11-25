@@ -1,0 +1,23 @@
+// Keys Neovim never sees (pickers, completion menu, debugging).
+// Editor keymaps live in ~/.config/nvim/lua/config/vscode.lua.
+[
+  // Quick open / command palette: move like Telescope
+  { "key": "ctrl+j", "command": "workbench.action.quickOpenSelectNext", "when": "inQuickOpen" },
+  { "key": "ctrl+k", "command": "workbench.action.quickOpenSelectPrevious", "when": "inQuickOpen" },
+
+  // Signature help in insert mode (blink's <C-k>)
+  {
+    "key": "ctrl+k",
+    "command": "editor.action.triggerParameterHints",
+    "when": "editorTextFocus && neovim.mode == insert && !suggestWidgetVisible"
+  },
+
+  // Completion menu: move like blink.cmp
+  { "key": "ctrl+j", "command": "selectNextSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+  { "key": "ctrl+k", "command": "selectPrevSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+  { "key": "ctrl+enter", "command": "acceptSelectedSuggestion", "when": "suggestWidgetVisible && textInputFocus" },
+
+  // Debugging: F5/F9/F10/F11 are VSCode defaults. F12 = step out while
+  // debugging (like nvim-dap), go-to-definition otherwise.
+  { "key": "f12", "command": "workbench.action.debug.stepOut", "when": "inDebugMode && debugState == 'stopped'" }
+]
